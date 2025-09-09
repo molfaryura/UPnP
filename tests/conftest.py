@@ -2,9 +2,19 @@
 
 import socket
 
+import logging
+
 import pytest
 
 import miniupnpc
+
+
+@pytest.fixture(scope="session")
+def log() -> logging.Logger:
+    logger = logging.getLogger("tests_logger")
+    logger.setLevel(logging.INFO)
+
+    return logger
 
 
 @pytest.fixture(scope="session")
