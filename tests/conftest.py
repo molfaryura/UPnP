@@ -1,5 +1,7 @@
 """Pytest configuration."""
 
+import socket
+
 import pytest
 
 import miniupnpc
@@ -18,3 +20,12 @@ def igd() -> miniupnpc.UPnP:
     upnp.selectigd()
 
     return upnp
+
+
+@pytest.fixture(scope="session")
+def local_ip_address() -> str:
+    """Fixture to get local IP address."""
+
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.connect(("8.8.8.8", 80))
+        return s.getsockname()[0]
