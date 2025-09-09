@@ -3,7 +3,7 @@
 import re
 
 
-def is_ip_address_valid(ip_address):
+def is_ip_address_valid(ip_address) -> bool:
     """Check if IP address is valid."""
 
     ipv4_pattern = (
