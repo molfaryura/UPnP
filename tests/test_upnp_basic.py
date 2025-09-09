@@ -1,4 +1,4 @@
-""" """
+"""Tests for basic IGD functionality."""
 
 import miniupnpc
 
@@ -17,3 +17,17 @@ def test_valid_ip_address(log, igd: miniupnpc.UPnP, local_ip_address: str):
         utils.is_ip_address_valid(external_ip_address)
         and external_ip_address != local_ip_address
     )
+
+
+def test_device_info(log, igd: miniupnpc.UPnP, local_ip_address: str):
+    """Test that device info is returned correctly."""
+
+    lan_addr = igd.lanaddr
+    log.info("Local IPv4 address: " + lan_addr)
+
+    assert lan_addr and lan_addr == local_ip_address
+
+    status_info = igd.statusinfo()
+    log.info(f"Status: {status_info}")
+
+    assert status_info
