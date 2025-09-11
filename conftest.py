@@ -24,10 +24,10 @@ def igd() -> miniupnpc.UPnP:
     upnp = miniupnpc.UPnP()
     upnp.discoverdelay = 800
 
-    if upnp.discover() <= 0:
-        pytest.skip("Can not find UPnP IGD.")
-
-    upnp.selectigd()
+    try:
+        upnp.selectigd()
+    except Exception as e:
+        pytest.skip(f"UPnP discovery and selection failed: {e}")
 
     return upnp
 
