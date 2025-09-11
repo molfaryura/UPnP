@@ -13,10 +13,13 @@ def test_valid_ip_address(log, igd: miniupnpc.UPnP, local_ip_address: str):
     log.info("IGD IPv4 address: " + external_ip_address)
     log.info("Local IPv4 address: " + local_ip_address)
 
+    assert utils.is_ip_address_valid(
+        external_ip_address
+    ), "IGD External IPv4 address is not valid"
+
     assert (
-        utils.is_ip_address_valid(external_ip_address)
-        and external_ip_address != local_ip_address
-    )
+        external_ip_address != local_ip_address
+    ), "External IP address is local IP address"
 
 
 def test_device_info(log, igd: miniupnpc.UPnP, local_ip_address: str):
@@ -25,9 +28,9 @@ def test_device_info(log, igd: miniupnpc.UPnP, local_ip_address: str):
     lan_addr = igd.lanaddr
     log.info("Local IPv4 address: " + lan_addr)
 
-    assert lan_addr and lan_addr == local_ip_address
+    assert lan_addr and lan_addr == local_ip_address, "IGD LAN address is not valid"
 
     status_info = igd.statusinfo()
     log.info(f"Status: {status_info}")
 
-    assert status_info
+    assert status_info, "IGD status info is not valid"
