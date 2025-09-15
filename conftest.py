@@ -10,13 +10,14 @@ import miniupnpc
 
 from upnp_setup import upnp_manager
 
+from utils import setup_logger
+
 
 @pytest.fixture(scope="session")
-def log() -> logging.Logger:
-    logger = logging.getLogger("tests_logger")
-    logger.setLevel(logging.INFO)
+def log():
+    """Fixture to set up logging for tests."""
 
-    return logger
+    return setup_logger(name="test_logger", log_file="logs/test_log.log")
 
 
 @pytest.fixture(scope="session")
