@@ -10,14 +10,14 @@ import miniupnpc
 
 from upnp_setup import upnp_manager
 
-from utils import setup_logger
+from utils import logger
 
 
 @pytest.fixture(scope="session")
 def log():
-    """Fixture to set up logging for tests."""
+    """Fixture to set up logger."""
 
-    return setup_logger(name="test_logger", log_file="logs/test_log.log")
+    return logger
 
 
 @pytest.fixture(scope="session")
@@ -27,7 +27,7 @@ def config_upnp(log: logging.Logger):
     (
         log.info("UPnP enabled")
         if upnp_manager.turn_on_upnp() is not None
-        else log.info("UPnP is already enabled")
+        else log.warning("UPnP is already enabled")
     )
 
     yield upnp_manager
@@ -35,12 +35,12 @@ def config_upnp(log: logging.Logger):
     (
         log.info("UPnP disabled")
         if upnp_manager.turn_off_upnp() is not None
-        else log.info("UPnP is already disabled")
+        else log.warning("UPnP is already disabled")
     )
 
 
 @pytest.fixture(scope="session")
-def igd() -> miniupnpc.UPnP:
+def igd(log) -> miniupnpc.UPnP:
     """Fixture to get IGD instance"""
     upnp = miniupnpc.UPnP()
     upnp.discoverdelay = 2000
@@ -49,6 +49,7 @@ def igd() -> miniupnpc.UPnP:
         upnp.discover()
         upnp.selectigd()
     except Exception as e:
+        log.error(f"UPnP discovery and selection failed: {e}")
         pytest.skip(f"UPnP discovery and selection failed: {e}")
 
     return upnp
