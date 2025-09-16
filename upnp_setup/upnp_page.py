@@ -2,6 +2,8 @@
 
 from playwright.sync_api import Page, ElementHandle
 
+from utils import logger
+
 
 class UpnpPage:
     """UPnP page object model"""
@@ -17,20 +19,32 @@ class UpnpPage:
     def go_to_upnp(self) -> None:
         """Navigate to the UPnP settings page."""
 
-        self.upnp_menu.click()
+        try:
+            self.upnp_menu.click()
+        except Exception as e:
+            logger.error(f"Failed to click UPnP menu item: {e}")
+            raise
 
     def change_upnp_state(self, state: bool) -> ElementHandle | None:
         """Change the UPnP state to the desired state."""
 
         if self.__check_upnp_state(state):
-            self.switch.click()
-            return self.page.wait_for_selector(self.success_selector)
+            try:
+                self.switch.click()
+                return self.page.wait_for_selector(self.success_selector)
+            except Exception as e:
+                logger.error(f"Failed to change UPnP state: {e}")
+                raise
         return None
 
     def __check_upnp_state(self, state) -> bool:
         """Helper method to check the current UPnP state."""
 
-        if state:
-            return not self.switch.is_checked()
-        else:
-            return self.switch.is_checked()
+        try:
+            if state:
+                return not self.switch.is_checked()
+            else:
+                return self.switch.is_checked()
+        except Exception as e:
+            logger.error(f"Failed to check UPnP state: {e}")
+            raise

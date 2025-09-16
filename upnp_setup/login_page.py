@@ -2,6 +2,8 @@
 
 from playwright.sync_api import Page
 
+from utils import logger
+
 
 class LoginPage:
     """Login page object model"""
@@ -19,10 +21,23 @@ class LoginPage:
     def enter_password(self, password: str) -> None:
         """Enter the password into the password field."""
 
-        self.page.goto(self.url)
-        self.password_field.fill(password)
+        try:
+            self.page.goto(self.url)
+        except Exception as e:
+            logger.error(f"Failed to navigate to {self.url}: {e}")
+            raise
+
+        try:
+            self.password_field.fill(password)
+        except Exception as e:
+            logger.error(f"Failed to fill password field: {e}")
+            raise
 
     def click_next(self) -> None:
         """Click the login button to proceed."""
 
-        self.button.click(delay=100)
+        try:
+            self.button.click(delay=100)
+        except Exception as e:
+            logger.error(f"Failed to click login button: {e}")
+            raise
