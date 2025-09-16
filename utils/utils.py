@@ -26,21 +26,19 @@ def setup_logger(
     logger = logging.getLogger(name)
     logger.setLevel(level)
 
-    for h in logger.handlers[:]:
-        logger.removeHandler(h)
+    if not logger.hasHandlers():
+        ch = logging.StreamHandler()
+        ch.setLevel(level)
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
 
-    ch = logging.StreamHandler()
-    ch.setLevel(level)
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
-
-    if log_file:
-        fh = logging.FileHandler(log_file, mode=file_mode)
-        fh.setLevel(level)
-        fh.setFormatter(formatter)
-        logger.addHandler(fh)
+        if log_file:
+            fh = logging.FileHandler(log_file, mode=file_mode)
+            fh.setLevel(level)
+            fh.setFormatter(formatter)
+            logger.addHandler(fh)
 
     return logger
