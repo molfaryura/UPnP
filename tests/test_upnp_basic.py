@@ -2,14 +2,14 @@
 
 import miniupnpc
 
-import utils
+from utils import utils
 
 
 def test_valid_ip_address(config_upnp, log, igd: miniupnpc.UPnP, local_ip_address: str):
     """Test that a valid IP address is returned correctly."""
 
+    log.info("Testing validation of external IGD IP address...")
     external_ip_address = igd.externalipaddress()
-
     log.info("IGD IPv4 address: " + external_ip_address)
     log.info("Local IPv4 address: " + local_ip_address)
 
@@ -25,6 +25,7 @@ def test_valid_ip_address(config_upnp, log, igd: miniupnpc.UPnP, local_ip_addres
 def test_device_info(config_upnp, log, igd: miniupnpc.UPnP, local_ip_address: str):
     """Test that device info is returned correctly."""
 
+    log.info("Testing retrieval of IGD device info...")
     lan_addr = igd.lanaddr
     log.info("Local IPv4 address: " + lan_addr)
 
