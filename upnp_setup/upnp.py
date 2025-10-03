@@ -50,7 +50,7 @@ class UpnpManager:
 
         with sync_playwright() as p:
             logger.info(f"Configuring UPnP settings. Desired state: {state}")
-            browser = p.chromium.launch(headless=False)
+            browser = p.chromium.launch(headless=True)
             page = browser.new_page()
 
             login_page = LoginPage(page=page, url=self.login_url)
