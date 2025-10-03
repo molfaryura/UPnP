@@ -30,7 +30,7 @@ class UpnpPage:
 
         if self.__check_upnp_state(state):
             try:
-                self.switch.click()
+                self.switch.click(delay=300)
                 return self.page.wait_for_selector(self.success_selector)
             except Exception as e:
                 logger.error(f"Failed to change UPnP state: {e}")
